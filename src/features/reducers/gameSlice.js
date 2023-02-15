@@ -3,24 +3,28 @@ import { startGame } from "../thunks";
 
 const initialState = {
   gameId: '',
-  loading: false,
+  loadingGame: false,
   error: '',
   message: ''
 }
 
 function customFullPending(state) {
-  state.loading = true
+  console.log('loadingGame true en gameSlice')
+  state.loadingGame = true
 }
 
 function customFullFulfilled(state, action) {
+  console.log('loadingGame false en gameSlice')
+
   state.gameId = action.payload
-  state.loading = false
+  state.loadingGame = false
 }
 
 function customFullRejected(state, action) {
-  state.loading = false
+  state.loadingGame = false
   // state.error = action.error.message
-  state.message = `Error initializing game: 404`
+  // state.message = `Error initializing game: 404`
+  state.message = 'Error initializing game: ' + action.error.message
 }
 
 const gameSlice = createSlice({

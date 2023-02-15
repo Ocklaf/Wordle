@@ -11,11 +11,42 @@ const initialState = {
       classNameColor: ['', '', '', '', ''],
     }],
   actualIndex: 0,
+  endGameMessage: '',
+  loadingCheckWord: false,
+  keysColor: {
+    'a': '',
+    'b': '',
+    'c': '',
+    'd': '',
+    'e': '',
+    'f': '',
+    'g': '',
+    'h': '',
+    'i': '',
+    'j': '',
+    'k': '',
+    'l': '',
+    'm': '',
+    'n': '',
+    'ñ': '',
+    'o': '',
+    'p': '',
+    'q': '',
+    'r': '',
+    's': '',
+    't': '',
+    'u': '',
+    'v': '',
+    'w': '',
+    'x': '',
+    'y': '',
+    'z': '',
+  },
 }
 
 function selectSlot(state, action) {
 
- // console.log('han hecho click ', action.payload)
+  // console.log('han hecho click ', action.payload)
   state.words[state.actualIndex].selectedSlot = action.payload
 
   //console.log('state.words[state.actualIndex].selectedSlot', state.words[state.actualIndex].selectedSlot)
@@ -39,7 +70,8 @@ function indexOfWord(state) {
 
 function letterKeyPushed(state, action) {
 
-  console.log('han hecho click ', action.payload)
+  //console.log('han hecho click ', action.payload)
+
   if (state.words[state.actualIndex].selectedSlot !== null) {
     state.words[state.actualIndex].letterOfTheWord[state.words[state.actualIndex].selectedSlot] = action.payload
     state.words[state.actualIndex].selectedSlot = indexOfWord(state)
@@ -64,43 +96,86 @@ function deleteLetterFromSlot(state) {
     return
   }
 
-  if(isEmptyAndIsTheFirstSlot) {
+  if (isEmptyAndIsTheFirstSlot) {
     let previousSlot = state.words[state.actualIndex].selectedSlot - 1
     state.words[state.actualIndex].letterOfTheWord[previousSlot] = ''
     state.words[state.actualIndex].selectedSlot = indexOfWord(state)
   }
 }
 
+function setKeyboardColor(newClassNameColor, index, state) {
+  let letter = state.words[state.actualIndex].letterOfTheWord[index].toLowerCase()
+
+  if (newClassNameColor === 'green' && state.keysColor[letter] !== 'green') {
+    state.keysColor[letter] = newClassNameColor
+    return
+  }
+
+  if (newClassNameColor === 'grey' && state.keysColor[letter] ===  '') {
+    state.keysColor[letter] = newClassNameColor
+    return
+  }
+
+  if (newClassNameColor === 'yellow' && state.keysColor[letter] === 'grey' || state.keysColor[letter] === '') {
+    state.keysColor[letter] = newClassNameColor
+  }
+
+  //state.keysColor[letter] = newClassNameColor
+ // console.log('letter', state.keysColor[letter])
+}
+
 
 function customFullPending(state) {
-  state.words[state.actualIndex].loading = true
+  state.loadingCheckWord = true
 }
 
 function customFullFulfilled(state, action) {
   //state.words[state.actualIndex].gameId = action.payload
-  console.log('el payload', action.payload)
+  //console.log('el payload', action.payload)
+
+  let isTheCorrectLetter = 0
+
   action.payload.forEach((value, index) => {
-    console.log('value', value.status)
-    if(value.status === 'in position') {
+    //console.log('value', value.status)
+    if (value.status === 'in position') {
       state.words[state.actualIndex].classNameColor[index] = 'green'
-      return
-    } else if (value.status === 'in word') {
-      state.words[state.actualIndex].classNameColor[index] = 'yellow'
+      isTheCorrectLetter++
+      setKeyboardColor('green', index, state)
       return
     }
+
+    if (value.status === 'in word') {
+      state.words[state.actualIndex].classNameColor[index] = 'yellow'
+      setKeyboardColor('yellow', index, state)
+      return
+    }
+
     state.words[state.actualIndex].classNameColor[index] = 'grey'
+    setKeyboardColor('grey', index, state)
   })
 
   /*Aquí hay un console.log*/
-  console.log([...state.words[state.actualIndex].classNameColor])
-  state.words[state.actualIndex].loading = false
-  state.words.push(getInitialState())
+  //console.log([...state.words[state.actualIndex].classNameColor])
+  if (isTheCorrectLetter === 5) {
+    state.loadingCheckWord = false
+    state.endGameMessage = 'Has ganado'
+    return
+  }
+    
+  if (state.actualIndex === 5) {
+    state.loadingCheckWord = false
+    state.endGameMessage = 'Has perdido'
+    return
+  }
+  
   state.actualIndex++
+  state.words.push(getInitialState())
+  state.loadingCheckWord = false
 }
 
 function customFullRejected(state, action) {
-  state.words[state.actualIndex].loading = false
-  state.words[state.actualIndex].error = action.error.message
+  state.loadingCheckWord = false
+  state.error = action.error.message
   //state.words[state.actualIndex].message = `Error initializing game: 404`
 }
 

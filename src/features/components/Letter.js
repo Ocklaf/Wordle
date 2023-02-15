@@ -6,6 +6,8 @@ import { selectSlotOnClick } from '../reducers/wordSlice'
 function Letter(props) {
   const { id, value, isSelected, color } = props
 
+  /*Me traigo el index de la línea en la que estamos jugando */
+
   const dispatch = useDispatch()
 
 

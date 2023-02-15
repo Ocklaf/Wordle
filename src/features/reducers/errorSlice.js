@@ -4,16 +4,21 @@ import { checkWord } from "../thunks";
 const initialState = {
   error: '',
   isValid: false,
+  loadingError: false
 }
 
 function customFullPending(state) {
-  state.loading = true
+  //console.log('loadingError errorSlice true')
+  state.loadingError = true
   state.isValid = false
 }
 
 function customFullFulfilled(state, action) {
-  console.log(action.payload.valid)
-  state.loading = false
+  //console.log(action.payload.valid)
+  //console.log('loadingError errorSlice false')  
+
+  state.loadingError = false
+
   if (!action.payload.valid) {
     state.error = 'La palabra no está en la lista'
     return
@@ -22,7 +27,7 @@ function customFullFulfilled(state, action) {
 }
 
 function customFullRejected(state, action) {
-  state.loading = false
+  state.loadingError = false
   state.error = action.error.message
 }
 
