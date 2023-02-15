@@ -1,0 +1,45 @@
+.letter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: var(--empty-slot);
+
+  font-size: 30px;
+  font-weight: bold;
+
+  width: 60px;
+  height: 60px;
+
+  border-radius: 10%;
+  border-color: var(--grey-border);
+  border-width: 1px;
+  border-style: solid;
+
+  transition: background-color 2s ease;
+}
+
+.slot.green {
+  background-color: var(--green-slot);
+  color: white;
+}
+
+.slot.yellow {
+  background-color: var(--yellow-slot);
+  color: white;
+}
+
+.slot.grey {
+  background-color: var(--grey-slot);
+  color: white;
+}
+
+.slot.selected {
+  border-color: var(--blue-border)
+}

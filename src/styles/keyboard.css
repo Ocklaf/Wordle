@@ -1,0 +1,52 @@
+/* Keyboard styles */
+:root {
+  --key-color: #e2e8f0;
+}
+
+.keyboard {
+  margin: 0 auto;
+  width: 500px;
+  user-select: none;
+}
+.keyboard-line {
+  background-color: white;
+  display: flex;
+  width: 100%;
+}
+
+.key, .command {
+  background-color: var(--key-color);
+  display: inline-flex;
+  margin: 5px;
+  height: 50px;
+  width: 20px;
+  flex-grow: 10;
+  font-weight: bold;
+  border-radius: 15%;
+  align-items: center;
+  justify-content: center;
+}
+
+.command {
+  flex-grow: 25;
+}
+
+.key.green {
+  background-color: var(--green-slot);
+  color: white;
+}
+
+.key.yellow {
+  background-color: var(--yellow-slot);
+  color: white;
+}
+
+.key.grey {
+  background-color: var(--grey-slot);
+  color: white;
+}
+
+.key:hover, .command:hover {
+  box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+}

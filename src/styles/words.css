@@ -1,0 +1,32 @@
+.words {
+  position: relative;
+  margin: 0 auto;
+  max-width: 335px;
+  user-select: none;
+  margin-bottom: 20px;
+}
+
+.words .container {
+  display: grid;
+  gap: 10px;
+  grid-template-rows: repeat(6, 1fr);
+}
+
+.word {
+  width: 100%;
+  display: grid;
+  gap: 5px;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.words .loading {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  box-sizing: border-box;
+  z-index: 9999;
+}
+
+.words .faded {
+  opacity: 0.3;
+}

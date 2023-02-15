@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+
+  <title>Adivina la palabra</title>
+  <link rel="stylesheet" href="./bundled_styles.css">
+</head>
+
+<body cz-shortcut-listen="true">
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root">
+    <div class="game">
+      <div class="message">Perdiste</div>
+      <div class="board">
+        <h1>Adivina la palabra</h1>
+        <div class="words">
+          <div class="container ">
+            <div class="word">
+              <div class="letter">
+                <div class="slot grey ">
+                  <p>P</p>
+                </div>
+              </div>
+              <div class="letter">
+                <div class="slot grey ">
+                  <p>I</p>
+                </div>
+              </div>
+              <div class="letter">
+                <div class="slot grey ">
+                  <p>S</p>
+                </div>
+              </div>
+              <div class="letter">
+                <div class="slot green ">
+                  <p>T</p>
+                </div>
+              </div>
+              <div class="letter">
+                <div class="slot green ">
+                  <p>A</p>
+                </div>
+              </div>
+            </div>
+            <div class="word">
+              <div class="letter">
+                <div class="slot grey ">
+                  <p>P</p>
+                </div>
+              </div>
+              <div class="letter">
+                <div class="slot green ">
+                  <p>E</p>
+                </div>
+              </div>
+              <div class="letter">
+                <div class="slot grey ">
+                  <p>S</p>
+                </div>
+              </div>
+              <div class="letter">
+                <div class="slot green ">
+                  <p>T</p>
+                </div>
+              </div>
+              <div class="letter">
+                <div class="slot grey ">
+                  <p>O</p>
+                </div>
+              </div>
+            </div>
+            <div class="word">
+              <div class="letter">
+                <div class="slot grey ">
+                  <p>C</p>
+                </div>
+              </div>
+              <div class="letter">
+                <div class="slot green ">
+                  <p>E</p>
+                </div>
+              </div>
+              <div class="letter">
+                <div class="slot grey ">
+                  <p>S</p>
+                </div>
+              </div>
+              <div class="letter">
+                <div class="slot green ">
+                  <p>T</p>
+                </div>
+              </div>
+              <div class="letter">
+                <div class="slot grey ">
+                  <p>O</p>
+                </div>
+              </div>
+            </div>
+            <div class="word">
+              <div class="letter">
+                <div class="slot grey ">
+                  <p>C</p>
+                </div>
+              </div>
+              <div class="letter">
+                <div class="slot green ">
+                  <p>E</p>
+                </div>
+              </div>
+              <div class="letter">
+                <div class="slot grey ">
+                  <p>S</p>
+                </div>
+              </div>
+              <div class="letter">
+                <div class="slot green ">
+                  <p>T</p>
+                </div>
+              </div>
+              <div class="letter">
+                <div class="slot green ">
+                  <p>A</p>
+                </div>
+              </div>
+            </div>
+            <div class="word">
+              <div class="letter">
+                <div class="slot green ">
+                  <p>B</p>
+                </div>
+              </div>
+              <div class="letter">
+                <div class="slot yellow ">
+                  <p>A</p>
+                </div>
+              </div>
+              <div class="letter">
+                <div class="slot grey ">
+                  <p>S</p>
+                </div>
+              </div>
+              <div class="letter">
+                <div class="slot green ">
+                  <p>T</p>
+                </div>
+              </div>
+              <div class="letter">
+                <div class="slot green ">
+                  <p>A</p>
+                </div>
+              </div>
+            </div>
+            <div class="word">
+              <div class="letter">
+                <div class="slot green ">
+                  <p>B</p>
+                </div>
+              </div>
+              <div class="letter">
+                <div class="slot yellow ">
+                  <p>A</p>
+                </div>
+              </div>
+              <div class="letter">
+                <div class="slot grey ">
+                  <p>J</p>
+                </div>
+              </div>
+              <div class="letter">
+                <div class="slot yellow ">
+                  <p>A</p>
+                </div>
+              </div>
+              <div class="letter">
+                <div class="slot yellow ">
+                  <p>R</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="keyboard">
+          <div class="keyboard-line">
+            <div class="key ">Q</div>
+            <div class="key ">W</div>
+            <div class="key green">E</div>
+            <div class="key yellow">R</div>
+            <div class="key green">T</div>
+            <div class="key ">Y</div>
+            <div class="key ">U</div>
+            <div class="key grey">I</div>
+            <div class="key grey">O</div>
+            <div class="key grey">P</div>
+          </div>
+          <div class="keyboard-line">
+            <div class="key green">A</div>
+            <div class="key grey">S</div>
+            <div class="key ">D</div>
+            <div class="key ">F</div>
+            <div class="key ">G</div>
+            <div class="key ">H</div>
+            <div class="key grey">J</div>
+            <div class="key ">K</div>
+            <div class="key ">L</div>
+            <div class="key ">Ñ</div>
+          </div>
+          <div class="keyboard-line">
+            <div class="command">↵</div>
+            <div class="key ">Z</div>
+            <div class="key ">X</div>
+            <div class="key grey">C</div>
+            <div class="key ">V</div>
+            <div class="key green">B</div>
+            <div class="key ">N</div>
+            <div class="key ">M</div>
+            <div class="command"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" aria-hidden="true" style="width: 20px; height: 30px;">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414 6.414a2 2 0 001.414.586H19a2 2 0 002-2V7a2 2 0 00-2-2h-8.172a2 2 0 00-1.414.586L3 12z">
+                </path>
+              </svg></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--
+    This HTML file is a template.
+    If you open it directly in the browser, you will see an empty page.
+
+    You can add webfonts, meta tags, or analytics to this file.
+    The build step will place the bundled scripts into the <body> tag.
+
+    To begin the development, run `npm start` or `yarn start`.
+    To create a production bundle, use `npm run build` or `yarn build`.
+  -->
+
+
+</body>
+
+</html>
