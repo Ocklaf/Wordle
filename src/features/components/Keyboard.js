@@ -1,45 +1,32 @@
 import '../../styles/keyboard.css'
 import { useDispatch, useSelector } from 'react-redux'
-import { letterClicked, deleteLetter, enterKey } from '../reducers/wordSlice'
+import { letterClicked, deleteLetter } from '../reducers/wordSlice'
 import { changeErrorMsg } from '../reducers/errorSlice'
-//import { addNewWord } from '../reducers/wordsSlice'
 import { checkWord, checkLetters } from '../thunks'
 import { useEffect } from 'react'
 
 function Keyboard() {
-/*importar los loadings aquí*/
 
-
-  //const keyboard = useSelector(state => state.keyboardState)
   const dispatch = useDispatch()
   const { words,actualIndex, keysColor, loadingCheckWord } = useSelector(state => state.word)
   const { isValid, loadingError } = useSelector(state => state.error)
   const { gameId, loadingGame } = useSelector(state => state.game)
 
-  /*const wordIsLoading = useSelector(state => state.dondetoque.elloading)*/
-  /*el del game loading*/
-
   const block1 = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P']
   const block2 = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Ñ']
   const block3 = ['Z', 'X', 'C', 'V', 'B', 'N', 'M']
+
+  function clickOnALetterKey(e) {
+    if (loadingGame || loadingError || loadingCheckWord) return
+    
+    dispatch(letterClicked(e.target.innerText))
+  }
 
   const upperLine = block1.map(key => <div className={`key ${keysColor[key.toLowerCase()]}`} key={key} onClick={clickOnALetterKey}>{key}</div>)
   const middleLine = block2.map(key => <div className={`key ${keysColor[key.toLowerCase()]}`} key={key} onClick={clickOnALetterKey}>{key}</div>)
   const lowerLine = block3.map(key => <div className={`key ${keysColor[key.toLowerCase()]}`} key={key} onClick={clickOnALetterKey}>{key}</div>)
 
-  function clickOnALetterKey(e) {
-    if (loadingGame || loadingError || loadingCheckWord) return
-    
-    /*if loading el que sea no hagas nada, return*/
-    dispatch(letterClicked(e.target.innerText))
-
-  }
-
-  /*hacer otra función para evitar el funcionamiento del borrar si está algún loading funcionando*/
-
-
   function verifyLengthOfTheWord() {
-    /*si está loading no haga lo de abajo, return y fuera*/
     if (loadingGame || loadingError || loadingCheckWord) return
     
     dispatch(changeErrorMsg(''))
@@ -47,7 +34,6 @@ function Keyboard() {
     if (words[actualIndex].letterOfTheWord.indexOf('') === -1) {
       let joinedWord = words[actualIndex].letterOfTheWord.join('')
       dispatch(checkWord(joinedWord))
-     // dispatch(addNewWord())
       return
     }
 
@@ -70,9 +56,6 @@ function Keyboard() {
           "id": gameId.id
         }
       })
-
-      /*Aquí hay un console.log*/
-     // console.log('arrayOfData', arrayWithObjects)
 
       dispatch(checkLetters(arrayWithObjects))
     }

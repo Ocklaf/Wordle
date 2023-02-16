@@ -9,11 +9,6 @@ function Letter(props) {
   /*Me traigo el index de la línea en la que estamos jugando */
 
   const dispatch = useDispatch()
-
-
-  //función para seleccionar Slot, idPalabra === idSlot
-
-  //const { letterOfTheWord, selectedSlot } = useSelector(state => state.word)
  
   return (
     <div className="letter" onClick={() => dispatch(selectSlotOnClick(id))}>

@@ -8,7 +8,8 @@
     "build:prod": "webpack --mode=production --node-env=production",
     "watch": "webpack --watch",
     "serve": "webpack serve",
-    "start": "webpack serve --mode=development --live-reload"
+    "start": "webpack serve --mode=development --live-reload",
+    "eslint": "eslint ./src"
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",
@@ -25,6 +26,8 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.2",
     "eslint": "^8.34.0",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5"

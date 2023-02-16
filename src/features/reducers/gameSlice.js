@@ -9,21 +9,16 @@ const initialState = {
 }
 
 function customFullPending(state) {
-  console.log('loadingGame true en gameSlice')
   state.loadingGame = true
 }
 
 function customFullFulfilled(state, action) {
-  console.log('loadingGame false en gameSlice')
-
   state.gameId = action.payload
   state.loadingGame = false
 }
 
 function customFullRejected(state, action) {
   state.loadingGame = false
-  // state.error = action.error.message
-  // state.message = `Error initializing game: 404`
   state.message = 'Error initializing game: ' + action.error.message
 }
 

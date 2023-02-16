@@ -7,12 +7,12 @@ const initialState = {
     {
       selectedSlot: 0,
       letterOfTheWord: ['', '', '', '', ''],
-      //letterOfTheWord: ['N', 'O', 'B', 'L', 'E'],
       classNameColor: ['', '', '', '', ''],
     }],
   actualIndex: 0,
   endGameMessage: '',
   loadingCheckWord: false,
+  errorInAnyLetter: '',
   keysColor: {
     'a': '',
     'b': '',
@@ -45,11 +45,7 @@ const initialState = {
 }
 
 function selectSlot(state, action) {
-
-  // console.log('han hecho click ', action.payload)
   state.words[state.actualIndex].selectedSlot = action.payload
-
-  //console.log('state.words[state.actualIndex].selectedSlot', state.words[state.actualIndex].selectedSlot)
 }
 
 function getInitialState() {
@@ -65,12 +61,11 @@ function indexOfWord(state) {
   if (state.words[state.actualIndex].letterOfTheWord.indexOf('') === -1) {
     return null
   }
+
   return state.words[state.actualIndex].letterOfTheWord.indexOf('')
 }
 
 function letterKeyPushed(state, action) {
-
-  //console.log('han hecho click ', action.payload)
 
   if (state.words[state.actualIndex].selectedSlot !== null) {
     state.words[state.actualIndex].letterOfTheWord[state.words[state.actualIndex].selectedSlot] = action.payload
@@ -106,22 +101,19 @@ function deleteLetterFromSlot(state) {
 function setKeyboardColor(newClassNameColor, index, state) {
   let letter = state.words[state.actualIndex].letterOfTheWord[index].toLowerCase()
 
-  if (newClassNameColor === 'green' && state.keysColor[letter] !== 'green') {
+  if (newClassNameColor === 'green') {
     state.keysColor[letter] = newClassNameColor
     return
   }
 
-  if (newClassNameColor === 'grey' && state.keysColor[letter] ===  '') {
+  if (newClassNameColor === 'yellow' && state.keysColor[letter] !== 'green') {
     state.keysColor[letter] = newClassNameColor
     return
   }
 
-  if (newClassNameColor === 'yellow' && state.keysColor[letter] === 'grey' || state.keysColor[letter] === '') {
+  if (newClassNameColor === 'grey') {
     state.keysColor[letter] = newClassNameColor
   }
-
-  //state.keysColor[letter] = newClassNameColor
- // console.log('letter', state.keysColor[letter])
 }
 
 
@@ -130,13 +122,10 @@ function customFullPending(state) {
 }
 
 function customFullFulfilled(state, action) {
-  //state.words[state.actualIndex].gameId = action.payload
-  //console.log('el payload', action.payload)
 
   let isTheCorrectLetter = 0
 
   action.payload.forEach((value, index) => {
-    //console.log('value', value.status)
     if (value.status === 'in position') {
       state.words[state.actualIndex].classNameColor[index] = 'green'
       isTheCorrectLetter++
@@ -154,8 +143,6 @@ function customFullFulfilled(state, action) {
     setKeyboardColor('grey', index, state)
   })
 
-  /*Aquí hay un console.log*/
-  //console.log([...state.words[state.actualIndex].classNameColor])
   if (isTheCorrectLetter === 5) {
     state.loadingCheckWord = false
     state.endGameMessage = 'Has ganado'
@@ -175,8 +162,9 @@ function customFullFulfilled(state, action) {
 
 function customFullRejected(state, action) {
   state.loadingCheckWord = false
-  state.error = action.error.message
-  //state.words[state.actualIndex].message = `Error initializing game: 404`
+  //state.errorInAnyLetter = "Error verificando cada letra: " + action.error.message
+  
+  console.log(action.error.message)
 }
 
 

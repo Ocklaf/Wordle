@@ -8,27 +8,24 @@ const initialState = {
 }
 
 function customFullPending(state) {
-  //console.log('loadingError errorSlice true')
   state.loadingError = true
   state.isValid = false
 }
 
 function customFullFulfilled(state, action) {
-  //console.log(action.payload.valid)
-  //console.log('loadingError errorSlice false')  
-
   state.loadingError = false
 
   if (!action.payload.valid) {
     state.error = 'La palabra no está en la lista'
     return
   }
+
   state.isValid = true
 }
 
 function customFullRejected(state, action) {
   state.loadingError = false
-  state.error = action.error.message
+  state.error = "Error al verificar la palabra: " + action.error.message
 }
 
 function changeErrorMessage(state, action) {
@@ -48,6 +45,5 @@ const errorSlice = createSlice({
   }
 })
 
-//export const { keyPusshed } = keyboardSlice.actions
 export default errorSlice.reducer;
 export const { changeErrorMsg } = errorSlice.actions

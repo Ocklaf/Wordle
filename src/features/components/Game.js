@@ -12,23 +12,13 @@ function Game() {
 
   const { error } = useSelector(state => state.error)
   const { message } = useSelector(state => state.game)
-  const { actualIndex, endGameMessage } = useSelector(state => state.word)
-  
-
-  // He puesto dos condiciones para que no se muestre el mensaje de partida terminada en wordSlice.js revisar si es correcto
-  //let finPartida = <></>
-  //
-  // useEffect(() => {
-  //   if (actualIndex === 6) {
-  //     finPartida = <h2>Has perdido</h2>
-  //     /**Lanzar error partida terminada */
-  //   }
-  // }, [actualIndex])
+  const { endGameMessage, errorInAnyLetter } = useSelector(state => state.word)
 
   function obtainGameId() {
     dispatch(startGame())
   }
 
+  /*según eslint, quitar el array vacío*/
   useEffect(() => obtainGameId(), [])
 
   return (
@@ -38,9 +28,10 @@ function Game() {
       <div className="board">
         <h1>Adivina la palabra</h1>
         <Words />
-        {/* {finPartida} */}
         <Keyboard />
         {error !== '' && <Error />}
+        {errorInAnyLetter !== '' && <Error />}
+
       </div>
     </div>
   )
