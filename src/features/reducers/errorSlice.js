@@ -3,24 +3,26 @@ import { checkWord } from "../thunks";
 
 const initialState = {
   error: '',
-  isValid: false,
+  isAValidWord: false,
   loadingError: false
 }
 
 function customFullPending(state) {
   state.loadingError = true
-  state.isValid = false
+  state.isAValidWord = false
 }
 
+/*TODO - full full?*/
 function customFullFulfilled(state, action) {
   state.loadingError = false
 
-  if (!action.payload.valid) {
+  let theWordDoesntExist = !action.payload.valid
+  if (theWordDoesntExist) {
     state.error = 'La palabra no está en la lista'
     return
   }
 
-  state.isValid = true
+  state.isAValidWord = true
 }
 
 function customFullRejected(state, action) {

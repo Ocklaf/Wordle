@@ -1,17 +1,23 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
+async function getObjectResponseValidated(response) {
+  if (!response.ok) throw response.status
+
+  const objectResponse = await response.json()
+
+  if (objectResponse.error) throw objectResponse.error
+
+  return objectResponse
+}
+
 async function getGameId() {
 
   const response = await fetch(
     "https://adivina-palabra.fly.dev/new/",
     { method: 'POST' }
   )
-
-  if (!response.ok) throw response.status
-
-  const id = await response.json()
-
-  return id
+  
+  return await getObjectResponseValidated(response)
 }
 
 async function checkTheWord(word) {
@@ -20,37 +26,16 @@ async function checkTheWord(word) {
     { method: 'GET' }
   )
 
-  if (!response.ok) throw response.status
-
-  const isValid = await response.json()
-
-  return isValid
+  return await getObjectResponseValidated(response)
 }
 
 
-async function checkEachLetter(objectData) {
+async function checkEachLetter(letterAndIndex) {
 
-  let data = { "position": objectData.position, "letter": objectData.letter }
-
-  // try {
-  //   const response = await fetch(
-  //     `https://adivina-palabra.fly.dev/guess/${objectData.id}`,
-  //     {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json'
-  //       },
-  //       body: JSON.stringify(data)
-  //     }
-  //   )
-  //   return await response.json()
-
-  // } catch (error) {
-  //   throw error
-  // }
+  let data = { "position": letterAndIndex.position, "letter": letterAndIndex.letter }
 
   const response = await fetch(
-    `https://adivina-palabra.fly.dev/guess/${objectData.id}`,
+    `https://adivina-palabra.fly.dev/guess/${letterAndIndex.id}`,
     {
       method: 'POST',
       headers: {
@@ -60,17 +45,14 @@ async function checkEachLetter(objectData) {
     }
   )
 
-  if (!response.ok) throw response.status
-
-  return await response.json()
-
+  return await getObjectResponseValidated(response)
 }
 
 
-async function checkTheLetters(arrayData) { /*Sin implementar! es copia y pega*/
+async function checkTheLetters(lettersWithIndex) { 
 
-  return Promise.all(arrayData.map((objectData) => {
-    return checkEachLetter(objectData)
+  return Promise.all(lettersWithIndex.map((letterAndIndex) => {
+    return checkEachLetter(letterAndIndex)
   }))
 
 }

@@ -3,7 +3,6 @@ import gameSlice from "../reducers/gameSlice";
 import keyboardReducer from "../reducers/keyboardSlice";
 import errorSlice from "../reducers/errorSlice";
 import wordSlice from "../reducers/wordSlice";
-import wordsSlice from "../reducers/wordsSlice";
 import letterSlice from "../reducers/letterSlice";
 
 export const store = configureStore({
@@ -12,7 +11,7 @@ export const store = configureStore({
     keyboard: keyboardReducer,
     error: errorSlice,
     word: wordSlice,
-    words: wordsSlice,
+   // words: wordsSlice,
     letter: letterSlice,
   },
 });

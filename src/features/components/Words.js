@@ -9,21 +9,21 @@ import Loading from "./Loading"
 
 function Words() {
   
-  const { actualIndex, loadingCheckWord } = useSelector(state => state.word)
+  const { actualWordIndex, loadingCheckWord } = useSelector(state => state.word)
   const { loadingError } = useSelector(state => state.error)
   const { loadingGame } = useSelector(state => state.game)
 
-  let [wordList, setWordList] = useState([])
+  let [wordsList, setWordsList] = useState([])
 
   useEffect(() => {
-    setWordList([...wordList, <Word key={actualIndex} index={actualIndex} />])
-  }, [actualIndex])
+    setWordsList([...wordsList, <Word key={actualWordIndex} actualWordIndex={actualWordIndex} />])
+  }, [actualWordIndex])
 
   return (
     <div className="words">
      { (loadingGame || loadingError || loadingCheckWord) && <Loading/>} 
       <div className="container ">
-        {wordList}
+        {wordsList}
       </div>
     </div>
   )

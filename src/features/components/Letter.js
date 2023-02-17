@@ -4,14 +4,19 @@ import { useDispatch, useSelector } from 'react-redux'
 import { selectSlotOnClick } from '../reducers/wordSlice'
 
 function Letter(props) {
-  const { id, value, isSelected, color } = props
-
-  /*Me traigo el index de la línea en la que estamos jugando */
+  const { id, value, isSelected, color, wordIndex } = props
+  const { actualWordIndex } = useSelector(state => state.word)
 
   const dispatch = useDispatch()
+
+  function selectSlotAtCurrentLine(id) {
+    if (wordIndex === actualWordIndex) {
+      dispatch(selectSlotOnClick(id))      
+    }
+  }
  
   return (
-    <div className="letter" onClick={() => dispatch(selectSlotOnClick(id))}>
+    <div className="letter" onClick={() => selectSlotAtCurrentLine(id)}>
       <div className={`slot ${isSelected ? 'selected': ''} ${color}`}>
         <p>{value}</p>
       </div>

@@ -4,11 +4,17 @@ import { useSelector } from 'react-redux'
 
 function Word(props) {
   
-  const { index } = props  
-  const { letterOfTheWord, selectedSlot, classNameColor } = useSelector(state => state.word.words[index])
+  const { actualWordIndex } = props  
+  const { lettersOfTheWord, selectedSlot, classNameColor } = useSelector(state => state.word.words[actualWordIndex])
 
-  let word = letterOfTheWord.map((value, index) =>
-    <Letter color={classNameColor[index]} key={index} id={index} value={value} isSelected={index === selectedSlot} />)
+  let word = lettersOfTheWord.map((value, index) =>
+    <Letter
+      color={classNameColor[index]}
+      key={index}
+      id={index}
+      value={value}
+      isSelected={index === selectedSlot}
+      wordIndex={actualWordIndex} />)
 
   return (
     <div className="word">

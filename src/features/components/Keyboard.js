@@ -8,31 +8,41 @@ import { useEffect } from 'react'
 function Keyboard() {
 
   const dispatch = useDispatch()
-  const { words,actualIndex, keysColor, loadingCheckWord } = useSelector(state => state.word)
-  const { isValid, loadingError } = useSelector(state => state.error)
+  const { words, actualWordIndex, keysColor, loadingCheckWord } = useSelector(state => state.word)
+  const { isAValidWord, loadingError } = useSelector(state => state.error)
   const { gameId, loadingGame } = useSelector(state => state.game)
+  const firstKeysLine = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P']
+  const secondKeysLine = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Ñ']
+  const thirdKeysLine = ['Z', 'X', 'C', 'V', 'B', 'N', 'M']
 
-  const block1 = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P']
-  const block2 = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Ñ']
-  const block3 = ['Z', 'X', 'C', 'V', 'B', 'N', 'M']
-
-  function clickOnALetterKey(e) {
-    if (loadingGame || loadingError || loadingCheckWord) return
-    
-    dispatch(letterClicked(e.target.innerText))
+  function isLoadingSomething() {
+    return loadingGame || loadingError || loadingCheckWord
   }
 
-  const upperLine = block1.map(key => <div className={`key ${keysColor[key.toLowerCase()]}`} key={key} onClick={clickOnALetterKey}>{key}</div>)
-  const middleLine = block2.map(key => <div className={`key ${keysColor[key.toLowerCase()]}`} key={key} onClick={clickOnALetterKey}>{key}</div>)
-  const lowerLine = block3.map(key => <div className={`key ${keysColor[key.toLowerCase()]}`} key={key} onClick={clickOnALetterKey}>{key}</div>)
+  function clickOnALetterKey(clickEvent) {
+    if (isLoadingSomething()) return
+    const letter = clickEvent.target.innerText
+    dispatch(letterClicked(letter))
+  }
+
+  const upperKeyboardLine = firstKeysLine.map(key => <div className={`key ${keysColor[key.toLowerCase()]}`} key={key} onClick={clickOnALetterKey}>{key}</div>)
+  const middleKeyboardLine = secondKeysLine.map(key => <div className={`key ${keysColor[key.toLowerCase()]}`} key={key} onClick={clickOnALetterKey}>{key}</div>)
+  const lowerKeyboardLine = thirdKeysLine.map(key => <div className={`key ${keysColor[key.toLowerCase()]}`} key={key} onClick={clickOnALetterKey}>{key}</div>)
+
+  function cleanErrorMessage() {
+    dispatch(changeErrorMsg(''))
+  }
 
   function verifyLengthOfTheWord() {
-    if (loadingGame || loadingError || loadingCheckWord) return
-    
-    dispatch(changeErrorMsg(''))
 
-    if (words[actualIndex].letterOfTheWord.indexOf('') === -1) {
-      let joinedWord = words[actualIndex].letterOfTheWord.join('')
+    if (isLoadingSomething()) return
+
+    cleanErrorMessage()
+
+    let isAllTheSlotsWithLetters = words[actualWordIndex].lettersOfTheWord.indexOf('') === -1
+
+    if (isAllTheSlotsWithLetters) {
+      let joinedWord = words[actualWordIndex].lettersOfTheWord.join('')
       dispatch(checkWord(joinedWord))
       return
     }
@@ -41,38 +51,45 @@ function Keyboard() {
   }
 
   function clickedOnDeleteKey() {
-    if(loadingGame || loadingError || loadingCheckWord) return
+
+    if (isLoadingSomething()) return
 
     dispatch(deleteLetter())
   }
 
+  /*TODO - RENAME*/
+  function addObjetsToTheArray() {
+    let arrayWithObjects = words[actualWordIndex].lettersOfTheWord.map((letter, index) => {
+      return {
+        "position": index,
+        "letter": letter.toLowerCase(),
+        "id": gameId.id
+      }
+    })
+
+    dispatch(checkLetters(arrayWithObjects))
+  }
+
   useEffect(() => {
-    if (isValid) {
 
-      let arrayWithObjects = words[actualIndex].letterOfTheWord.map((letter, index) => {
-        return {
-          "position": index,
-          "letter": letter.toLowerCase(),
-          "id": gameId.id
-        }
-      })
-
-      dispatch(checkLetters(arrayWithObjects))
+    if (isAValidWord) {
+      addObjetsToTheArray()
     }
-  }, [isValid])
+
+  }, [isAValidWord])
 
 
   return (
     <div className="keyboard">
       <div className="keyboard-line">
-        {upperLine}
+        {upperKeyboardLine}
       </div>
       <div className="keyboard-line">
-        {middleLine}
+        {middleKeyboardLine}
       </div>
       <div className="keyboard-line">
         <div className="command" onClick={verifyLengthOfTheWord}>↵</div>
-        {lowerLine}
+        {lowerKeyboardLine}
         <div className="command" onClick={clickedOnDeleteKey}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
           stroke="currentColor" aria-hidden="true" style={{ width: "20px", height: "30px" }}>
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"

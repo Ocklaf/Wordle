@@ -5,6 +5,7 @@ import Error from "./Error"
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { startGame } from "../thunks";
+import { changeErrorMsg } from '../reducers/errorSlice';
 
 function Game() {
 
@@ -18,9 +19,17 @@ function Game() {
     dispatch(startGame())
   }
 
-  /*según eslint, quitar el array vacío*/
+  /*según eslint, quitar el array vacío o que incluya obtainGameId pero entra en bucle infinito*/
   useEffect(() => obtainGameId(), [])
 
+  useEffect(() => {    
+    function setErrorMessage() {
+      dispatch(changeErrorMsg(errorInAnyLetter))
+    }
+    if(!errorInAnyLetter) return
+    setErrorMessage()
+  }, [errorInAnyLetter])
+  
   return (
     <div className="game">
       {message && <div className="message">{message}</div>}
@@ -30,8 +39,6 @@ function Game() {
         <Words />
         <Keyboard />
         {error !== '' && <Error />}
-        {errorInAnyLetter !== '' && <Error />}
-
       </div>
     </div>
   )

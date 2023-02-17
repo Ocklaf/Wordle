@@ -1,170 +1,147 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { checkLetters } from "../thunks";
 
-
 const initialState = {
   words: [
     {
       selectedSlot: 0,
-      letterOfTheWord: ['', '', '', '', ''],
+      lettersOfTheWord: ['', '', '', '', ''],
       classNameColor: ['', '', '', '', ''],
     }],
-  actualIndex: 0,
+  actualWordIndex: 0,
   endGameMessage: '',
   loadingCheckWord: false,
   errorInAnyLetter: '',
-  keysColor: {
-    'a': '',
-    'b': '',
-    'c': '',
-    'd': '',
-    'e': '',
-    'f': '',
-    'g': '',
-    'h': '',
-    'i': '',
-    'j': '',
-    'k': '',
-    'l': '',
-    'm': '',
-    'n': '',
-    'ñ': '',
-    'o': '',
-    'p': '',
-    'q': '',
-    'r': '',
-    's': '',
-    't': '',
-    'u': '',
-    'v': '',
-    'w': '',
-    'x': '',
-    'y': '',
-    'z': '',
-  },
+  keysColor: {},
 }
 
 function selectSlot(state, action) {
-  state.words[state.actualIndex].selectedSlot = action.payload
+  state.words[state.actualWordIndex].selectedSlot = action.payload
 }
 
 function getInitialState() {
   return {
     selectedSlot: 0,
-    letterOfTheWord: ['', '', '', '', ''],
+    lettersOfTheWord: ['', '', '', '', ''],
     classNameColor: ['', '', '', '', ''],
   }
 }
 
 function indexOfWord(state) {
 
-  if (state.words[state.actualIndex].letterOfTheWord.indexOf('') === -1) {
+  let allSlotsAreFilled = state.words[state.actualWordIndex].lettersOfTheWord.indexOf('') === -1
+
+  if (allSlotsAreFilled) {
     return null
   }
 
-  return state.words[state.actualIndex].letterOfTheWord.indexOf('')
+  return state.words[state.actualWordIndex].lettersOfTheWord.indexOf('')
 }
 
 function letterKeyPushed(state, action) {
 
-  if (state.words[state.actualIndex].selectedSlot !== null) {
-    state.words[state.actualIndex].letterOfTheWord[state.words[state.actualIndex].selectedSlot] = action.payload
-    state.words[state.actualIndex].selectedSlot = indexOfWord(state)
+  let anySlotIsSelected = state.words[state.actualWordIndex].selectedSlot !== null
+
+  if (anySlotIsSelected) {
+    state.words[state.actualWordIndex].lettersOfTheWord[state.words[state.actualWordIndex].selectedSlot] = action.payload
+    state.words[state.actualWordIndex].selectedSlot = indexOfWord(state)
   }
 }
 
+
+/*TODO*/
 function deleteLetterFromSlot(state) {
 
-  let noSelectedSlot = state.words[state.actualIndex].selectedSlot === null
-  let isSelectedAndNotEmpty = state.words[state.actualIndex].letterOfTheWord[state.words[state.actualIndex].selectedSlot] !== ''
-  let isEmptyAndIsTheFirstSlot = state.words[state.actualIndex].letterOfTheWord[state.words[state.actualIndex].selectedSlot] === '' && state.words[state.actualIndex].selectedSlot !== 0
+  let noSelectedSlot = state.words[state.actualWordIndex].selectedSlot === null
+  let isSelectedAndNotEmpty = state.words[state.actualWordIndex].lettersOfTheWord[state.words[state.actualWordIndex].selectedSlot] !== ''
+  let isEmptyAndIsTheFirstSlot = state.words[state.actualWordIndex].lettersOfTheWord[state.words[state.actualWordIndex].selectedSlot] === '' && state.words[state.actualWordIndex].selectedSlot !== 0
 
   if (noSelectedSlot) {
-    state.words[state.actualIndex].letterOfTheWord[state.words[state.actualIndex].letterOfTheWord.length - 1] = ''
-    state.words[state.actualIndex].selectedSlot = indexOfWord(state)
+    state.words[state.actualWordIndex].lettersOfTheWord[state.words[state.actualWordIndex].lettersOfTheWord.length - 1] = ''
+    state.words[state.actualWordIndex].selectedSlot = indexOfWord(state)
     return
   }
 
   if (isSelectedAndNotEmpty) {
-    state.words[state.actualIndex].letterOfTheWord[state.words[state.actualIndex].selectedSlot] = ''
-    state.words[state.actualIndex].selectedSlot = indexOfWord(state)
+    state.words[state.actualWordIndex].lettersOfTheWord[state.words[state.actualWordIndex].selectedSlot] = ''
+    state.words[state.actualWordIndex].selectedSlot = indexOfWord(state)
     return
   }
 
   if (isEmptyAndIsTheFirstSlot) {
-    let previousSlot = state.words[state.actualIndex].selectedSlot - 1
-    state.words[state.actualIndex].letterOfTheWord[previousSlot] = ''
-    state.words[state.actualIndex].selectedSlot = indexOfWord(state)
+    let previousSlot = state.words[state.actualWordIndex].selectedSlot - 1
+    state.words[state.actualWordIndex].lettersOfTheWord[previousSlot] = ''
+    state.words[state.actualWordIndex].selectedSlot = indexOfWord(state)
   }
 }
 
 function setKeyboardColor(newClassNameColor, index, state) {
-  let letter = state.words[state.actualIndex].letterOfTheWord[index].toLowerCase()
+  let letter = state.words[state.actualWordIndex].lettersOfTheWord[index].toLowerCase()
 
-  if (newClassNameColor === 'green') {
-    state.keysColor[letter] = newClassNameColor
+  if (state.keysColor[letter] === 'green') {
     return
   }
 
-  if (newClassNameColor === 'yellow' && state.keysColor[letter] !== 'green') {
-    state.keysColor[letter] = newClassNameColor
-    return
-  }
-
-  if (newClassNameColor === 'grey') {
-    state.keysColor[letter] = newClassNameColor
-  }
+  state.keysColor[letter] = newClassNameColor
 }
 
+function getStatusColor(status) {
+  if (status === 'in position') {
+    return 'green'
+  }
 
-function customFullPending(state) {
-  state.loadingCheckWord = true
+  if (status === 'in word') {
+    return 'yellow'
+  }
+
+  return 'grey'
 }
 
-function customFullFulfilled(state, action) {
-
+/*TODO - VERIFICAR SI HAS GANADO EN UNA FUNCIÓN VIENDO LOS COLORES DE LAS PALABRAS*/
+function setSlotsColor(dataReponseForEachWord, state) {
   let isTheCorrectLetter = 0
 
-  action.payload.forEach((value, index) => {
-    if (value.status === 'in position') {
-      state.words[state.actualIndex].classNameColor[index] = 'green'
+  dataReponseForEachWord.forEach((value, index) => {
+
+    let color = getStatusColor(value.status)
+    if (color === 'green') {
       isTheCorrectLetter++
-      setKeyboardColor('green', index, state)
-      return
     }
 
-    if (value.status === 'in word') {
-      state.words[state.actualIndex].classNameColor[index] = 'yellow'
-      setKeyboardColor('yellow', index, state)
-      return
-    }
-
-    state.words[state.actualIndex].classNameColor[index] = 'grey'
-    setKeyboardColor('grey', index, state)
+    state.words[state.actualWordIndex].classNameColor[index] = color
+    setKeyboardColor(color, index, state)
   })
 
   if (isTheCorrectLetter === 5) {
     state.loadingCheckWord = false
     state.endGameMessage = 'Has ganado'
-    return
   }
-    
-  if (state.actualIndex === 5) {
+}
+
+function customFullPending(state) {
+  state.loadingCheckWord = true
+}
+
+/*TODO - HACE DEMASIADAS COSAS*/
+function customFullFulfilled(state, action) {
+  let isTheLastWord = state.actualWordIndex === 5
+
+  setSlotsColor(action.payload, state)
+
+  if (isTheLastWord) {
     state.loadingCheckWord = false
     state.endGameMessage = 'Has perdido'
     return
   }
-  
-  state.actualIndex++
+
+  state.actualWordIndex++
   state.words.push(getInitialState())
   state.loadingCheckWord = false
 }
 
 function customFullRejected(state, action) {
   state.loadingCheckWord = false
-  //state.errorInAnyLetter = "Error verificando cada letra: " + action.error.message
-  
-  console.log(action.error.message)
+  state.errorInAnyLetter = action.error.message
 }
 
 
