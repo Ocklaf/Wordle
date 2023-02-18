@@ -7,13 +7,12 @@ const initialState = {
   loadingError: false
 }
 
-function customFullPending(state) {
+function pendingCheckWord(state) {
   state.loadingError = true
   state.isAValidWord = false
 }
 
-/*TODO - full full?*/
-function customFullFulfilled(state, action) {
+function fullfilledCheckWord(state, action) {
   state.loadingError = false
 
   let theWordDoesntExist = !action.payload.valid
@@ -25,7 +24,7 @@ function customFullFulfilled(state, action) {
   state.isAValidWord = true
 }
 
-function customFullRejected(state, action) {
+function rejectedCheckWord(state, action) {
   state.loadingError = false
   state.error = "Error al verificar la palabra: " + action.error.message
 }
@@ -41,9 +40,9 @@ const errorSlice = createSlice({
     changeErrorMsg: changeErrorMessage,
   },
   extraReducers: {
-    [checkWord.pending]: customFullPending,
-    [checkWord.fulfilled]: customFullFulfilled,
-    [checkWord.rejected]: customFullRejected
+    [checkWord.pending]: pendingCheckWord,
+    [checkWord.fulfilled]: fullfilledCheckWord,
+    [checkWord.rejected]: rejectedCheckWord
   }
 })
 

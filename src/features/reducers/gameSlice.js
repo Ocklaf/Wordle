@@ -8,16 +8,16 @@ const initialState = {
   message: ''
 }
 
-function customFullPending(state) {
+function pendingGetGameId(state) {
   state.loadingGame = true
 }
 
-function customFullFulfilled(state, action) {
+function fullfilledGetGameId(state, action) {
   state.gameId = action.payload
   state.loadingGame = false
 }
 
-function customFullRejected(state, action) {
+function rejectedGetGameIs(state, action) {
   state.loadingGame = false
   state.message = 'Error initializing game: ' + action.error.message
 }
@@ -28,9 +28,9 @@ const gameSlice = createSlice({
   reducers: {
   },
   extraReducers: {
-    [startGame.pending]: customFullPending,
-    [startGame.fulfilled]: customFullFulfilled,
-    [startGame.rejected]: customFullRejected
+    [startGame.pending]: pendingGetGameId,
+    [startGame.fulfilled]: fullfilledGetGameId,
+    [startGame.rejected]: rejectedGetGameIs
   }
 })
 

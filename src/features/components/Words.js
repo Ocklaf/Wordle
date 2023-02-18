@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 import '../../styles/words.css'
 import '../../styles/loading.css'
-
+import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import Word from "./Word"
 import Loading from "./Loading"
 
@@ -15,8 +14,12 @@ function Words() {
 
   let [wordsList, setWordsList] = useState([])
 
-  useEffect(() => {
+  function addNewWordInList() {
     setWordsList([...wordsList, <Word key={actualWordIndex} actualWordIndex={actualWordIndex} />])
+  }
+
+  useEffect(() => {
+    addNewWordInList()
   }, [actualWordIndex])
 
   return (

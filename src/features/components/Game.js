@@ -1,11 +1,11 @@
 import '../../styles/game.css'
-import Keyboard from "./Keyboard"
-import Words from "./Words"
-import Error from "./Error"
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { startGame } from "../thunks";
 import { changeErrorMsg } from '../reducers/errorSlice';
+import Keyboard from "./Keyboard"
+import Words from "./Words"
+import Error from "./Error"
 
 function Game() {
 
@@ -19,13 +19,13 @@ function Game() {
     dispatch(startGame())
   }
 
-  /*según eslint, quitar el array vacío o que incluya obtainGameId pero entra en bucle infinito*/
+  function setErrorMessage() {
+    dispatch(changeErrorMsg(errorInAnyLetter))
+  }
+
   useEffect(() => obtainGameId(), [])
 
   useEffect(() => {    
-    function setErrorMessage() {
-      dispatch(changeErrorMsg(errorInAnyLetter))
-    }
     if(!errorInAnyLetter) return
     setErrorMessage()
   }, [errorInAnyLetter])

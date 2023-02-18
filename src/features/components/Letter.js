@@ -1,6 +1,5 @@
 import '../../styles/letter.css'
 import { useDispatch, useSelector } from 'react-redux'
-
 import { selectSlotOnClick } from '../reducers/wordSlice'
 
 function Letter(props) {

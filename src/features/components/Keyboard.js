@@ -58,7 +58,7 @@ function Keyboard() {
   }
 
   /*TODO - RENAME*/
-  function addObjetsToTheArray() {
+  function addObjectsLetterWithPosition() {
     let arrayWithObjects = words[actualWordIndex].lettersOfTheWord.map((letter, index) => {
       return {
         "position": index,
@@ -73,7 +73,7 @@ function Keyboard() {
   useEffect(() => {
 
     if (isAValidWord) {
-      addObjetsToTheArray()
+      addObjectsLetterWithPosition()
     }
 
   }, [isAValidWord])
