@@ -13,9 +13,7 @@ const initialState = {
 const wordsSlice = createSlice({
   name: "words",
   initialState,
-  reducers: {
-  // addNewWord: addOneWord,
-  },
+  reducers: {},
 })
 
 //export const { keyPusshed } = keyboardSlice.actions

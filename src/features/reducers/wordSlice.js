@@ -53,8 +53,6 @@ function letterKeyPushed(state, action) {
   }
 }
 
-
-/*TODO... sólo he sacado una función refactorizando... no veo cómo hacer algo más*/
 function deleteLetterFromSlot(state) {
 
   let noSelectedSlot = state.words[state.actualWordIndex].selectedSlot === null

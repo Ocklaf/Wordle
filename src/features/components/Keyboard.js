@@ -57,7 +57,6 @@ function Keyboard() {
     dispatch(deleteLetter())
   }
 
-  /*TODO - RENAME*/
   function addObjectsLetterWithPosition() {
     let arrayWithObjects = words[actualWordIndex].lettersOfTheWord.map((letter, index) => {
       return {
