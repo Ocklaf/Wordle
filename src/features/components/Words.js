@@ -8,25 +8,27 @@ import Loading from "./Loading"
 
 function Words() {
   
-  const { actualWordIndex, loadingCheckWord } = useSelector(state => state.word)
-  const { loadingError } = useSelector(state => state.error)
-  const { loadingGame } = useSelector(state => state.game)
+  const { loading, words } = useSelector(state => state.wordle)
+  const playedWords = words.length
+  // const { loadingError } = useSelector(state => state.error)
+  // const { loadingGame } = useSelector(state => state.game)
 
-  let [wordsList, setWordsList] = useState([])
+  //let [wordsList, setWordsList] = useState([])
 
-  function addNewWordInList() {
-    setWordsList([...wordsList, <Word key={actualWordIndex} actualWordIndex={actualWordIndex} />])
-  }
+  // function addNewWordInList() {
+  //   setWordsList([...wordsList, <Word key={actualWordIndex} actualWordIndex={actualWordIndex} />])
+  // }
 
-  useEffect(() => {
-    addNewWordInList()
-  }, [actualWordIndex])
+  // useEffect(() => {
+  //   addNewWordInList()
+  // }, [actualWordIndex])
 
+/*https://stackoverflow.com/questions/3746725/how-to-create-an-array-containing-1-n*/
   return (
     <div className="words">
-     { (loadingGame || loadingError || loadingCheckWord) && <Loading/>} 
+     { loading && <Loading/>} 
       <div className="container ">
-        {wordsList}
+        {Array.from(Array(playedWords).keys()).map((_, index) => <Word key={index} actualWordIndex={index} />) }
       </div>
     </div>
   )

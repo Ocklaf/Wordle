@@ -1,18 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { checkLetters } from "../thunks";
+import { checkLetters, checkWord, startGame } from "../thunks";
 
 const initialState = {
+  gameId: '',
   words: [
     {
       selectedSlot: 0,
       lettersOfTheWord: ['', '', '', '', ''],
       classNameColor: ['', '', '', '', ''],
     }],
+  isAValidWord: false,
   actualWordIndex: 0,
   endGameMessage: '',
-  loadingCheckWord: false,
-  errorInAnyLetter: '',
+  loading: false,
   keysColor: {},
+  message: '',
+  error: ''
 }
 
 function indexOfWord(state) {
@@ -110,7 +113,7 @@ function setEndGameMessage(state, message) {
 
 function isTheGameFinished(state) {
   let isTheLastWord = state.actualWordIndex === 5
-  state.loadingCheckWord = false
+  state.loading = false
 
   if (isAllLettersGreen(state)) {
     setEndGameMessage(state, 'Has ganado')
@@ -136,40 +139,87 @@ function setSlotsColor(dataReponseForEachWord, state) {
   })
 }
 
+function changeErrorMessage(state, action) {
+  state.error = action.payload
+}
+
 function pendingCheckLetters(state) {
-  state.loadingCheckWord = true
+  state.loading = true
 }
 
 function fullfilledCheckLetters(state, action) {
 
   setSlotsColor(action.payload, state)
 
-  if(isTheGameFinished(state)) return
+  if (isTheGameFinished(state)) return
 
   state.actualWordIndex++
   state.words.push(getInitialState())
-  state.loadingCheckWord = false
+  state.loading = false
 }
 
 function rejectedCheckLetters(state, action) {
-  state.loadingCheckWord = false
-  state.errorInAnyLetter = action.error.message
+  state.loading = false
+  state.error = action.error.message
+}
+
+function pendingCheckWord(state) {
+  state.loading = true
+  state.isAValidWord = false
+}
+
+function fullfilledCheckWord(state, action) {
+  state.loading = false
+
+  let theWordDoesntExist = !action.payload.valid
+  if (theWordDoesntExist) {
+    state.error = 'La palabra no está en la lista'
+    return
+  }
+
+  state.isAValidWord = true
+}
+
+function rejectedCheckWord(state, action) {
+  state.loading = false
+  state.error = "Error al verificar la palabra: " + action.error.message
+}
+
+function pendingGetGameId(state) {
+  state.loading = true
+}
+
+function fullfilledGetGameId(state, action) {
+  state.gameId = action.payload
+  state.loading = false
+}
+
+function rejectedGetGameIs(state, action) {
+  state.loading = false
+  state.message = 'Error initializing game: ' + action.error.message
 }
 
 const wordSlice = createSlice({
-  name: 'word',
+  name: 'wordle',
   initialState,
   reducers: {
     selectSlotOnClick: selectSlot,
     letterClicked: letterKeyPushed,
     deleteLetter: deleteLetterFromSlot,
+    changeErrorMsg: changeErrorMessage,
   },
   extraReducers: {
     [checkLetters.pending]: pendingCheckLetters,
     [checkLetters.fulfilled]: fullfilledCheckLetters,
-    [checkLetters.rejected]: rejectedCheckLetters
+    [checkLetters.rejected]: rejectedCheckLetters,
+    [checkWord.pending]: pendingCheckWord,
+    [checkWord.fulfilled]: fullfilledCheckWord,
+    [checkWord.rejected]: rejectedCheckWord,
+    [startGame.pending]: pendingGetGameId,
+    [startGame.fulfilled]: fullfilledGetGameId,
+    [startGame.rejected]: rejectedGetGameIs
   }
 })
 
 export default wordSlice.reducer
-export const { selectSlotOnClick, letterClicked, deleteLetter, enterKey } = wordSlice.actions
+export const { selectSlotOnClick, letterClicked, deleteLetter, changeErrorMsg } = wordSlice.actions

@@ -58,17 +58,17 @@ async function checkTheLetters(lettersWithIndex) {
 }
 
 const checkLetters = createAsyncThunk(
-  "word/custom",
+  "wordle/fetchLetters",
   checkTheLetters
 )
 
 const checkWord = createAsyncThunk(
-  "error/custom",
+  "wordle/fetchWord",
   checkTheWord
 )
 
 const startGame = createAsyncThunk(
-  "game/custom",
+  "wordle/fetchGameId",
   getGameId
 )
 

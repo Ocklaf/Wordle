@@ -4,7 +4,10 @@ import Letter from './Letter'
 function Word(props) {
   
   const { actualWordIndex } = props  
-  const { lettersOfTheWord, selectedSlot, classNameColor } = useSelector(state => state.word.words[actualWordIndex])
+  const { lettersOfTheWord, selectedSlot, classNameColor } = useSelector(state => state.wordle.words[actualWordIndex])
+
+ // const { words } = useSelector(state => state.word)
+  // const actualWord = words[actualWordIndex]
 
   let word = lettersOfTheWord.map((value, index) =>
     <Letter
