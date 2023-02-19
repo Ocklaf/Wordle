@@ -29,7 +29,6 @@ function indexOfWord(state) {
   return state.words[state.actualWordIndex].lettersOfTheWord.indexOf('')
 }
 
-
 function selectSlot(state, action) {
   state.words[state.actualWordIndex].selectedSlot = action.payload
 }
@@ -199,7 +198,7 @@ function rejectedGetGameIs(state, action) {
   state.message = 'Error initializing game: ' + action.error.message
 }
 
-const wordSlice = createSlice({
+const wordleSlice = createSlice({
   name: 'wordle',
   initialState,
   reducers: {
@@ -221,5 +220,5 @@ const wordSlice = createSlice({
   }
 })
 
-export default wordSlice.reducer
-export const { selectSlotOnClick, letterClicked, deleteLetter, changeErrorMsg } = wordSlice.actions
+export default wordleSlice.reducer
+export const { selectSlotOnClick, letterClicked, deleteLetter, changeErrorMsg } = wordleSlice.actions

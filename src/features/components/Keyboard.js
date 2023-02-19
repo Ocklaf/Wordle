@@ -1,7 +1,6 @@
 import '../../styles/keyboard.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { letterClicked, deleteLetter, changeErrorMsg } from '../reducers/wordleSlice'
-//import { changeErrorMsg } from '../reducers/errorSlice'
 import { checkWord, checkLetters } from '../thunks'
 import { useEffect } from 'react'
 
@@ -9,15 +8,9 @@ function Keyboard() {
 
   const dispatch = useDispatch()
   const { words, actualWordIndex, keysColor, loading, gameId, isAValidWord } = useSelector(state => state.wordle)
-  // const { isAValidWord, loadingError } = useSelector(state => state.error)
-  // const { gameId, loadingGame } = useSelector(state => state.game)
   const firstKeysLine = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P']
   const secondKeysLine = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Ñ']
   const thirdKeysLine = ['Z', 'X', 'C', 'V', 'B', 'N', 'M']
-
-  // function isLoadingSomething() {
-  //   return loadingGame || loadingError || loadingCheckWord
-  // }
 
   function clickOnALetterKey(clickEvent) {
     if (loading) return

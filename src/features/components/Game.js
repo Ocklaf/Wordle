@@ -2,7 +2,6 @@ import '../../styles/game.css'
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { startGame } from "../thunks";
-//import { changeErrorMsg } from '../reducers/errorSlice';
 import Keyboard from "./Keyboard"
 import Words from "./Words"
 import Error from "./Error"
@@ -10,25 +9,13 @@ import Error from "./Error"
 function Game() {
 
   const dispatch = useDispatch()
-
-  // const { error } = useSelector(state => state.error)
-  // const { message } = useSelector(state => state.game)
   const { endGameMessage, message, error } = useSelector(state => state.wordle)
 
   function obtainGameId() {
     dispatch(startGame())
   }
 
-  // function setErrorMessage() {
-  //   dispatch(changeErrorMsg(errorInAnyLetter))
-  // }
-
   useEffect(() => obtainGameId(), [])
-
-  // useEffect(() => {    
-  //   if(!errorInAnyLetter) return
-  //   setErrorMessage()
-  // }, [errorInAnyLetter])
   
   return (
     <div className="game">
