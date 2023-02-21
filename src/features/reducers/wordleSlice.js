@@ -57,24 +57,26 @@ function letterKeyPushed(state, action) {
 
 function deleteLetterFromSlot(state) {
 
-  let noSelectedSlot = state.words[state.actualWordIndex].selectedSlot === null
-  let isSelectedAndNotEmpty = state.words[state.actualWordIndex].lettersOfTheWord[state.words[state.actualWordIndex].selectedSlot] !== ''
-  let isEmptyAndIsTheFirstSlot = state.words[state.actualWordIndex].lettersOfTheWord[state.words[state.actualWordIndex].selectedSlot] === '' && state.words[state.actualWordIndex].selectedSlot !== 0
+  let indexOfSelectedSlot = state.words[state.actualWordIndex].selectedSlot
+  let noSelectedSlot = indexOfSelectedSlot === null
+  let isSelectedAndNotEmpty = state.words[state.actualWordIndex].lettersOfTheWord[indexOfSelectedSlot] !== ''
+  let isEmptyAndIsTheFirstSlot = state.words[state.actualWordIndex].lettersOfTheWord[indexOfSelectedSlot] === '' && indexOfSelectedSlot !== 0
 
   if (noSelectedSlot) {
-    state.words[state.actualWordIndex].lettersOfTheWord[state.words[state.actualWordIndex].lettersOfTheWord.length - 1] = ''
+    let lastIndexOfTheLetters = state.words[state.actualWordIndex].lettersOfTheWord.length - 1
+    state.words[state.actualWordIndex].lettersOfTheWord[lastIndexOfTheLetters] = ''
     selectFirstEmptySlot(state)
     return
   }
 
   if (isSelectedAndNotEmpty) {
-    state.words[state.actualWordIndex].lettersOfTheWord[state.words[state.actualWordIndex].selectedSlot] = ''
+    state.words[state.actualWordIndex].lettersOfTheWord[indexOfSelectedSlot] = ''
     selectFirstEmptySlot(state)
     return
   }
 
   if (isEmptyAndIsTheFirstSlot) {
-    let previousSlot = state.words[state.actualWordIndex].selectedSlot - 1
+    let previousSlot = indexOfSelectedSlot - 1
     state.words[state.actualWordIndex].lettersOfTheWord[previousSlot] = ''
     selectFirstEmptySlot(state)
   }
@@ -106,21 +108,17 @@ function isAllLettersGreen(state) {
   return state.words[state.actualWordIndex].classNameColor.every(color => color === 'green')
 }
 
-function setEndGameMessage(state, message) {
-  state.endGameMessage = message
-}
-
 function isTheGameFinished(state) {
   let isTheLastWord = state.actualWordIndex === 5
   state.loading = false
 
   if (isAllLettersGreen(state)) {
-    setEndGameMessage(state, 'Has ganado')
+    state.endGameMessage = 'Has ganado'
     return true
   }
 
   if (isTheLastWord) {
-    setEndGameMessage(state, 'Has perdido')
+    state.endGameMessage = 'Has perdido'
     return true
   }
 
@@ -142,11 +140,12 @@ function changeErrorMessage(state, action) {
   state.error = action.payload
 }
 
-function pendingCheckLetters(state) {
+function pendingCheckWord(state) {
   state.loading = true
+  state.isAValidWord = false
 }
 
-function fullfilledCheckLetters(state, action) {
+function fullfilledCheckWord(state, action) {
 
   setSlotsColor(action.payload, state)
 
@@ -155,28 +154,6 @@ function fullfilledCheckLetters(state, action) {
   state.actualWordIndex++
   state.words.push(getInitialState())
   state.loading = false
-}
-
-function rejectedCheckLetters(state, action) {
-  state.loading = false
-  state.error = action.error.message
-}
-
-function pendingCheckWord(state) {
-  state.loading = true
-  state.isAValidWord = false
-}
-
-function fullfilledCheckWord(state, action) {
-  state.loading = false
-
-  let theWordDoesntExist = !action.payload.valid
-  if (theWordDoesntExist) {
-    state.error = 'La palabra no está en la lista'
-    return
-  }
-
-  state.isAValidWord = true
 }
 
 function rejectedCheckWord(state, action) {
@@ -189,11 +166,11 @@ function pendingGetGameId(state) {
 }
 
 function fullfilledGetGameId(state, action) {
-  state.gameId = action.payload
+  state.gameId = action.payload.id
   state.loading = false
 }
 
-function rejectedGetGameIs(state, action) {
+function rejectedGetGameId(state, action) {
   state.loading = false
   state.message = 'Error initializing game: ' + action.error.message
 }
@@ -208,15 +185,12 @@ const wordleSlice = createSlice({
     changeErrorMsg: changeErrorMessage,
   },
   extraReducers: {
-    [checkLetters.pending]: pendingCheckLetters,
-    [checkLetters.fulfilled]: fullfilledCheckLetters,
-    [checkLetters.rejected]: rejectedCheckLetters,
     [checkWord.pending]: pendingCheckWord,
     [checkWord.fulfilled]: fullfilledCheckWord,
     [checkWord.rejected]: rejectedCheckWord,
     [startGame.pending]: pendingGetGameId,
     [startGame.fulfilled]: fullfilledGetGameId,
-    [startGame.rejected]: rejectedGetGameIs
+    [startGame.rejected]: rejectedGetGameId
   }
 })
 

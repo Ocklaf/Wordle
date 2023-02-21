@@ -20,16 +20,6 @@ async function getGameId() {
   return await getObjectResponseValidated(response)
 }
 
-async function checkTheWord(word) {
-  const response = await fetch(
-    `https://adivina-palabra.fly.dev/check/${word}`,
-    { method: 'GET' }
-  )
-
-  return await getObjectResponseValidated(response)
-}
-
-
 async function checkEachLetter(letterAndIndex) {
 
   let data = { "position": letterAndIndex.position, "letter": letterAndIndex.letter }
@@ -49,7 +39,15 @@ async function checkEachLetter(letterAndIndex) {
 }
 
 
-async function checkTheLetters(lettersWithIndex) { 
+async function checkTheLetters(arrayWithLetters, gameId) { 
+
+  let lettersWithIndex = arrayWithLetters.map((letter, index) => {
+    return {
+      "position": index,
+      "letter": letter.toLowerCase(),
+      "id": gameId
+    }
+  })
 
   return Promise.all(lettersWithIndex.map((letterAndIndex) => {
     return checkEachLetter(letterAndIndex)
@@ -57,10 +55,21 @@ async function checkTheLetters(lettersWithIndex) {
 
 }
 
-const checkLetters = createAsyncThunk(
-  "wordle/fetchLetters",
-  checkTheLetters
-)
+async function checkTheWord(objectWordAndId) {
+
+  const response = await fetch(
+    `https://adivina-palabra.fly.dev/check/${objectWordAndId.word.join('')}`,
+    { method: 'GET' }
+  )
+
+  const objectResponse = await getObjectResponseValidated(response)
+
+  if (!objectResponse.valid) {
+    throw 'La palabra no está en la lista'
+  }
+
+  return await checkTheLetters(objectWordAndId.word, objectWordAndId.id)
+}
 
 const checkWord = createAsyncThunk(
   "wordle/fetchWord",
@@ -72,4 +81,4 @@ const startGame = createAsyncThunk(
   getGameId
 )
 
-export { startGame, checkWord, checkLetters }  
+export { startGame, checkWord }  

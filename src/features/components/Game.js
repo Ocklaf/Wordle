@@ -11,11 +11,9 @@ function Game() {
   const dispatch = useDispatch()
   const { endGameMessage, message, error } = useSelector(state => state.wordle)
 
-  function obtainGameId() {
+  useEffect(() => {
     dispatch(startGame())
-  }
-
-  useEffect(() => obtainGameId(), [])
+  }, [dispatch])
   
   return (
     <div className="game">

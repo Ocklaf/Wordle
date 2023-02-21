@@ -7,7 +7,7 @@ import { useEffect } from 'react'
 function Keyboard() {
 
   const dispatch = useDispatch()
-  const { words, actualWordIndex, keysColor, loading, gameId, isAValidWord } = useSelector(state => state.wordle)
+  const { words, actualWordIndex, keysColor, loading, gameId } = useSelector(state => state.wordle)
   const firstKeysLine = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P']
   const secondKeysLine = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Ñ']
   const thirdKeysLine = ['Z', 'X', 'C', 'V', 'B', 'N', 'M']
@@ -35,8 +35,7 @@ function Keyboard() {
     let isAllTheSlotsWithLetters = words[actualWordIndex].lettersOfTheWord.indexOf('') === -1
 
     if (isAllTheSlotsWithLetters) {
-      let joinedWord = words[actualWordIndex].lettersOfTheWord.join('')
-      dispatch(checkWord(joinedWord))
+      dispatch(checkWord({word: words[actualWordIndex].lettersOfTheWord, id: gameId}))
       return
     }
 
@@ -49,27 +48,6 @@ function Keyboard() {
 
     dispatch(deleteLetter())
   }
-
-  function addObjectsLetterWithPosition() {
-    let arrayWithObjects = words[actualWordIndex].lettersOfTheWord.map((letter, index) => {
-      return {
-        "position": index,
-        "letter": letter.toLowerCase(),
-        "id": gameId.id
-      }
-    })
-
-    dispatch(checkLetters(arrayWithObjects))
-  }
-
-  useEffect(() => {
-
-    if (isAValidWord) {
-      addObjectsLetterWithPosition()
-    }
-
-  }, [isAValidWord])
-
 
   return (
     <div className="keyboard">
