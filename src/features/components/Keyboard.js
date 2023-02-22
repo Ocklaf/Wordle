@@ -1,8 +1,7 @@
 import '../../styles/keyboard.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { letterClicked, deleteLetter, changeErrorMsg } from '../reducers/wordleSlice'
-import { checkWord, checkLetters } from '../thunks'
-import { useEffect } from 'react'
+import { checkWord } from '../thunks'
 
 function Keyboard() {
 

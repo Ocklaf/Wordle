@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { checkLetters, checkWord, startGame } from "../thunks";
+import { checkWord, startGame } from "../thunks";
 
 const initialState = {
   gameId: '',
@@ -37,7 +37,7 @@ function selectFirstEmptySlot(state) {
   state.words[state.actualWordIndex].selectedSlot = indexOfWord(state)
 }
 
-function getInitialState() {
+function newSlotLineWithInitialStates() {
   return {
     selectedSlot: 0,
     lettersOfTheWord: ['', '', '', '', ''],
@@ -45,7 +45,7 @@ function getInitialState() {
   }
 }
 
-function letterKeyPushed(state, action) {
+function printLetterKeyPushed(state, action) {
 
   let anySlotIsSelected = state.words[state.actualWordIndex].selectedSlot !== null
 
@@ -152,13 +152,13 @@ function fullfilledCheckWord(state, action) {
   if (isTheGameFinished(state)) return
 
   state.actualWordIndex++
-  state.words.push(getInitialState())
+  state.words.push(newSlotLineWithInitialStates())
   state.loading = false
 }
 
 function rejectedCheckWord(state, action) {
   state.loading = false
-  state.error = "Error al verificar la palabra: " + action.error.message
+  state.error = action.error.message
 }
 
 function pendingGetGameId(state) {
@@ -180,7 +180,7 @@ const wordleSlice = createSlice({
   initialState,
   reducers: {
     selectSlotOnClick: selectSlot,
-    letterClicked: letterKeyPushed,
+    letterClicked: printLetterKeyPushed,
     deleteLetter: deleteLetterFromSlot,
     changeErrorMsg: changeErrorMessage,
   },
