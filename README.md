@@ -2,14 +2,14 @@
 
 This project has been created using **webpack-cli**, you can now run
 
+You can run this project now using:
+
 ```
-npm run build
+yarn install and then yarn start
 ```
 
-or
+If you want to bundle the application:
 
 ```
 yarn build
 ```
-
-to bundle your application
