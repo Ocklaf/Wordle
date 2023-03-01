@@ -126,7 +126,6 @@ function isTheGameFinished(state) {
 }
 
 function setSlotsColor(dataReponseForEachWord, state) {
-
   dataReponseForEachWord.forEach((value, index) => {
     let color = getStatusColor(value.status)
 
@@ -146,7 +145,6 @@ function pendingCheckWord(state) {
 }
 
 function fullfilledCheckWord(state, action) {
-
   setSlotsColor(action.payload, state)
 
   if (isTheGameFinished(state)) return
